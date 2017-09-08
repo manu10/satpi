@@ -12,7 +12,7 @@ class SIM808CHS{
 public:
 	SIM808CHS(uint32_t baudrate);
 	void setup();
-	bool sendData(char * pluv, char * lev);
+	bool sendData(int pluv, char * lev);
 };
 
 #endif
