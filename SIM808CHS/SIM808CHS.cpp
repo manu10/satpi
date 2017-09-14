@@ -63,16 +63,20 @@ bool SIM808CHS::sendData(int pluv, char * lev){
     UtilsCHS::readBuffer(&SIM800LSerial,"OK", "ERROR", TIME, &result);
     if (result!=8){//si NO hizo match con ERROR
       Serial.println("URL");
-      SIM800LSerial.println("AT+HTTPPARA=\"URL\",\"satpi.herokuapp.com/api/v1/packages\"");
+      SIM800LSerial.println("AT+HTTPPARA=\"URL\",\"satpi.herokuapp.com/api/v1/batch_create_packages\"");
       UtilsCHS::readBuffer(&SIM800LSerial,"OK", "ERROR", TIME, &result);
       if (result!=1){//si NO hizo match con ERROR
         SIM800LSerial.println("AT+HTTPPARA=\"CONTENT\",\"application/json\"");
         UtilsCHS::readBuffer(&SIM800LSerial,"OK", "ERROR", TIME, &result);
         if (result!=1){//si NO hizo match con ERROR
-          SIM800LSerial.println("AT+HTTPDATA=40,1000");
+          SIM800LSerial.println("AT+HTTPDATA=100,2000");
           UtilsCHS::readBuffer(&SIM800LSerial,"DOWNLOAD", "ERROR", TIME, &result);
           if (result==0){//si NO hizo match con ERROR
-            SIM800LSerial.println("{ \"sensor_id\": 1, \"data\": 988 }");//Parametrizar
+            SIM800LSerial.println("{\"packages\":[{\"sensor_id\": 1,\"data\":");
+            SIM800LSerial.println(lev);
+            SIM800LSerial.println("},{\"sensor_id\": 2,\"data\":");
+            SIM800LSerial.println(pluv);
+            SIM800LSerial.println("}]}");
           }
           UtilsCHS::readBuffer(&SIM800LSerial,"OK", "ERROR", TIME, &result);
           SIM800LSerial.println("AT+HTTPACTION=1");
